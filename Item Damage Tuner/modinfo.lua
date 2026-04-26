@@ -1,5 +1,5 @@
 name = "Item Damage Tuner"
-description = "Fully adjustable item damage.\n\nBase: +10 per click\nFloat: +0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually."
+description = "Fully adjustable item damage.\n\nBase: +-10 per click\nFloat: +-0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually."
 author = "Storymiralias"
 version = "1.0.0"
 
@@ -18,7 +18,7 @@ server_filter_tags = {"Item Damage Tuner", "Options", "Wepons"}
 icon = "modicon.tex"
 icon_atlas = "modicon.xml"
 
--- Integer options generator
+-- Base options generator
 local function IntegerOptions()
 	local t = {}
 	local count = 1  
