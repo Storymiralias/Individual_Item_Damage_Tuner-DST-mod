@@ -1,10 +1,11 @@
+
 name = "Item Damage Tuner"
 description = "Fully adjustable item damage.\n\nBase: +-10 per click\nFloat: +-0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually."
 author = "Storymiralias"
 version = "1.0.0"
 
 forumthread = ""
--- id = "" Individual Item Damage Tuner (Такое будет название в мастерской)
+-- id = "" | Individual Item Damage Tuner (This will be the name in the Workshop)
 
 api_version = 10
 -- priority = 0
@@ -13,7 +14,7 @@ all_clients_require_mod = true
 client_only_mod = false
 
 dst_compatible = true
-server_filter_tags = {"Item Damage Tuner", "Options", "Wepons"}
+server_filter_tags = {"Item Damage Tuner", "Options", "Weapons"}
 
 icon = "modicon.tex"
 icon_atlas = "modicon.xml"
@@ -40,6 +41,10 @@ local function FloatOptions()
 	return t
 end
 
+-- Optimized to reduce function calls
+local int_opts = IntegerOptions()
+local float_opts = FloatOptions()
+
 -- Mod settings
 configuration_options = {
 
@@ -53,7 +58,7 @@ default = "",
 		name = "SPEAR_BASE",
 		label = "Spear Base",
 		hover = "Default is 30",
-		options = IntegerOptions(),
+		options = int_opts,
 		default = 30,	
 	},
 		
@@ -61,7 +66,7 @@ default = "",
 		name = "SPEAR_FLOAT",
 		label = "Spear Float",
 		hover = "Default is 4",
-		options = FloatOptions(),
+		options = float_opts,
 		default = 4,	
 	},
 	
