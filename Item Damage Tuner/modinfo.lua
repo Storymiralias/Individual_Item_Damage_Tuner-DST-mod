@@ -5,10 +5,8 @@ author = "Storymiralias"
 version = "1.0.0"
 
 forumthread = ""
--- id = "" | Individual Item Damage Tuner (This will be the name in the Workshop)
 
 api_version = 10
--- priority = 0
 
 all_clients_require_mod = true
 client_only_mod = false
@@ -19,7 +17,7 @@ server_filter_tags = {"Item Damage Tuner", "Options", "Weapons"}
 icon = "modicon.tex"
 icon_atlas = "modicon.xml"
 
--- Base options generator
+--- Base options generator (0, 10... 9990)
 local function IntegerOptions()
 	local t = {}
 	local count = 1  
@@ -29,7 +27,7 @@ local function IntegerOptions()
 	end
 	return t
 end
--- Float options generator
+--- Float options generator (0, 0.1... 9.9)
 local function FloatOptions()
 	local t = {}
 	local count = 1
@@ -41,33 +39,47 @@ local function FloatOptions()
 	return t
 end
 
--- Optimized to reduce function calls
+-- Cache options to avoid redundant function calls during generation 
 local int_opts = IntegerOptions()
 local float_opts = FloatOptions()
 
--- Mod settings
-configuration_options = {
-
-{name = "",
-label = "Melee Weapons",
-hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info.",
-options = {{description = "", data = ""},},
-default = "",
-},
-	{
-		name = "SPEAR_BASE",
-		label = "Spear Base",
-		hover = "Default is 30",
-		options = int_opts,
-		default = 30,	
-	},
-		
-	{
-		name = "SPEAR_FLOAT",
-		label = "Spear Float",
-		hover = "Default is 4",
-		options = float_opts,
-		default = 4,	
-	},
-	
+-- Items data list for compiling cycle below
+local items_to_add = {
+	-- Melee Weapons
+	{ is_header = true, label = "--- Melee Weapons ---", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info" },
+	{ id = "SPEAR", label = "Spear", default_int = 30, default_fl = 4 },
 }
+
+local c = 1
+local configuration_options = {}
+
+-- Mod options compiling cycle
+for i = 1, #items_to_add do
+
+	local item = items_to_add[i]
+
+	if not item.is_header then 
+		-- Base
+		configuration_options[c] = {
+			name = item.id .."_BASE",
+			label = item.label .." Base",
+			hover = "Default is ".. item.default_int,
+			options = int_opts,
+			default = item.default_int,	
+		}
+		c = c + 1
+		
+		-- Float
+		configuration_options[c] = {
+			name = item.id .."_FLOAT",
+			label = item.label .." Float",
+			hover = "Default is ".. item.default_fl,
+			options = float_opts,
+			default = item.default_fl,
+		}
+		c = c + 1
+	else
+		-- Headers Labels
+		configuration_options[c] = {name = "HEADER_" ..i, label = item.label, hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info"}
+	end
+end
