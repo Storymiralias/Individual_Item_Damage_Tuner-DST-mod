@@ -17,7 +17,9 @@ server_filter_tags = {"Item Damage Tuner", "Options", "Weapons"}
 icon = "modicon.tex"
 icon_atlas = "modicon.xml"
 
---- Base options generator (0, 10... 9990)
+--- Generates a table of integer options 
+-- Ranges from 0 to 9990 with step of 10
+-- @return table: An Array of entries, each containing {description: number, data: number}
 local function IntegerOptions()
 	local t = {}
 	local count = 1  
@@ -27,7 +29,9 @@ local function IntegerOptions()
 	end
 	return t
 end
---- Float options generator (0, 0.1... 9.9)
+
+--- Generates a table of float options (0.0 to 9.9, step 0.1)
+-- @return table: An array of entries, each containing {description: string, data: number}
 local function FloatOptions()
 	local t = {}
 	local count = 1
@@ -39,27 +43,45 @@ local function FloatOptions()
 	return t
 end
 
--- Cache options to avoid redundant function calls during generation 
+-- Persistent cache for option tables to optimize memory usage during mod initialization
 local int_opts = IntegerOptions()
 local float_opts = FloatOptions()
 
--- Items data list for compiling cycle below
+--- Decomposes a raw damage value into its base and fractional components
+-- Formats the ID into a display-friendly label
+-- @param id string: The internal prefab identifier (e.g., "SPEAR")
+-- @param damage number: The original constant damage value
+-- @return table: A structure containing {id: string, label: string, default_int: number, default_fl: number}
+local function SmartAdd(id, damage)
+	local def_float = damage % 10	
+	local def_int = damage - def_float	
+	
+	-- Apply title case formatting for UI presentation
+	local label_name = (id:sub(1,1):upper()) .. (id:sub(2):lower())
+
+	return {id = id, label = label_name, default_int = def_int, default_fl = def_float}
+end
+
+-- Registry of items to be exposed in the mod configuration interface 
 local items_to_add = {
 	-- Melee Weapons
 	{ is_header = true, label = "--- Melee Weapons ---", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info" },
-	{ id = "SPEAR", label = "Spear", default_int = 30, default_fl = 4 },
+	SmartAdd("SPEAR", 34)
+	
 }
 
 local c = 1
 local configuration_options = {}
 
--- Mod options compiling cycle
+--- Orchestrates the generation of the configuration_options table
+-- Transforms simplified item data into the standard format required by the game engine
+-- Handles both functional settings (Base/Float) and UI visual elements (headers)
 for i = 1, #items_to_add do
 
 	local item = items_to_add[i]
 
 	if not item.is_header then 
-		-- Base
+		-- Section: Base Damage (Integer component)
 		configuration_options[c] = {
 			name = item.id .."_BASE",
 			label = item.label .." Base",
@@ -69,7 +91,7 @@ for i = 1, #items_to_add do
 		}
 		c = c + 1
 		
-		-- Float
+		-- Section: Float Damage (Fractional component)
 		configuration_options[c] = {
 			name = item.id .."_FLOAT",
 			label = item.label .." Float",
@@ -79,7 +101,8 @@ for i = 1, #items_to_add do
 		}
 		c = c + 1
 	else
-		-- Headers Labels
+		-- Section: UI Decorative Headers 
+		-- Used to group items by category in the options menu
 		configuration_options[c] = {name = "HEADER_" ..i, label = item.label, hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info"}
 	end
 end
