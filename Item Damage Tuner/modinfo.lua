@@ -19,12 +19,12 @@ icon_atlas = "modicon.xml"
 
 --- Generates a table of integer options 
 -- Ranges from 0 to 9990 with step of 10
--- @return table: An Array of entries, each containing {description: number, data: number}
+-- @return table: An Array of entries, each containing {description: string, data: number}
 local function IntegerOptions()
 	local t = {}
 	local count = 1  
 	for i = 0, 9990, 10 do
-		t[count] = {description = i, data = i}
+		t[count] = {description = "" ..i, data = i}
 		count = count + 1
 	end
 	return t
@@ -53,6 +53,7 @@ local float_opts = FloatOptions()
 -- @param damage number: The original constant damage value
 -- @return table: A structure containing {id: string, label: string, default_int: number, default_fl: number}
 local function SmartAdd(id, damage)
+
 	local def_float = damage % 10	
 	local def_int = damage - def_float	
 	
@@ -65,13 +66,13 @@ end
 -- Registry of items to be exposed in the mod configuration interface 
 local items_to_add = {
 	-- Melee Weapons
-	{ is_header = true, label = "--- Melee Weapons ---", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info" },
+	{ is_header = true, label = "Melee Weapons", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info"},
 	SmartAdd("SPEAR", 34)
 	
 }
 
 local c = 1
-local configuration_options = {}
+configuration_options = {}
 
 --- Orchestrates the generation of the configuration_options table
 -- Transforms simplified item data into the standard format required by the game engine
@@ -89,8 +90,7 @@ for i = 1, #items_to_add do
 			options = int_opts,
 			default = item.default_int,	
 		}
-		c = c + 1
-		
+		c = c + 1	
 		-- Section: Float Damage (Fractional component)
 		configuration_options[c] = {
 			name = item.id .."_FLOAT",
@@ -99,10 +99,15 @@ for i = 1, #items_to_add do
 			options = float_opts,
 			default = item.default_fl,
 		}
-		c = c + 1
+		c = c + 1	
 	else
-		-- Section: UI Decorative Headers 
+		-- Section: UI Decorative Headers
 		-- Used to group items by category in the options menu
-		configuration_options[c] = {name = "HEADER_" ..i, label = item.label, hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info"}
+		configuration_options[c] = {
+		name = "HEADER_" ..i,
+		label = item.label,
+		hover = item.hover,
+		options = {{description = "", data = ""}}, default = ""}
+		c = c + 1
 	end
 end
