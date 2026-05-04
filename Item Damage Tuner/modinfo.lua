@@ -1,4 +1,4 @@
-
+-- TODO: Update documentation about SmartAdd and other if need
 name = "Item Damage Tuner"
 description = "Fully adjustable item damage.\n\nBase: +-10 per click\nFloat: +-0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually."
 author = "Storymiralias"
@@ -52,22 +52,71 @@ local float_opts = FloatOptions()
 -- @param id string: The internal prefab identifier (e.g., "SPEAR")
 -- @param damage number: The original constant damage value
 -- @return table: A structure containing {id: string, label: string, default_int: number, default_fl: number}
-local function SmartAdd(id, damage)
+local function SmartAdd(id, damage, manual_label)
 
-	local def_float = damage % 10	
+	local def_float_rema = damage % 10	
+	local def_float = (def_float_rema * 10 - (def_float_rema * 10 % 1)) / 10
 	local def_int = damage - def_float	
 	
 	-- Apply title case formatting for UI presentation
-	local label_name = (id:sub(1,1):upper()) .. (id:sub(2):lower())
+	local label_name = manual_label or (id:sub(1,1):upper()) .. (id:sub(2):lower()) --TODO?: Remove all "_"
 
 	return {id = id, label = label_name, default_int = def_int, default_fl = def_float}
 end
 
 -- Registry of items to be exposed in the mod configuration interface 
-local items_to_add = {
-	-- Melee Weapons
-	{ is_header = true, label = "Melee Weapons", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info"},
-	SmartAdd("SPEAR", 34)
+local items_to_add = { --TODO: Add labels for each item manualy. Check real base damage
+	{ is_header = true, label = "Start Melee Weapons"},
+	-- Start Melee Weapons
+	--SmartAdd("spear_wathgrithr", )
+	
+	{ is_header = true, label = "Beginner and intermediate"},
+	-- Beginner and intermediate stage (Basic and personal)
+	SmartAdd("SPEAR", 34),
+	SmartAdd("hambat", 59.5),
+	SmartAdd("BULLKELP_ROOT", 34, "bullkelp root"),
+	SmartAdd("tentaclespike", 51),
+	SmartAdd("battlepaddle", 34),
+	SmartAdd("cutless", 34),
+	
+	--[[ Character exclusive
+	SmartAdd("dumbbell", 17)
+	SmartAdd("dumbbell_golden", 27.2)
+	SmartAdd("dumbbell_marbell", 40.8)
+	SmartAdd("pocketwatch_weapon", 34)]]
+	
+	{ is_header = true, label = "Advanced Stage"},
+	-- Advanced Stage (Magic, Ruins and Surface)
+	SmartAdd("whip", 27.2),
+	SmartAdd("nightsword", 68),
+	SmartAdd("ruins_bat", 59.5),
+	SmartAdd("glasscutter", 34),
+	SmartAdd("nightstick", 28.9),
+	
+	--[[ Character exclusive
+	SmartAdd("dumbbell_gem", 68)]]
+	
+	{ is_header = true, label = "Boss Drop"},
+	-- Boss Drop or Craft 
+	SmartAdd("shield_terror", 51),
+	SmartAdd("rabbitkingspear", 34),
+	SmartAdd("trident", 68),
+	
+	{ is_header = true, label = "Endgame"},
+	-- Endgame (Rifts and Ancient Archive)
+	SmartAdd("sword_lunarplant", 34),
+	SmartAdd("shadow_battleaxe", 34),
+	SmartAdd("voidcloth_scythe", 34),
+	SmartAdd("shadow_pillar", 68),
+	
+	--[[ Character exclusive
+	SmartAdd("spear_wathgrithr_lightning", 42.5)
+	SmartAdd("spear_wathgrithr_ice", 42.5)]]
+	
+	--{ is_header = true, label = "Ranged Weapon"},
+	-- Ranged Weapon
+	-- SmartAdd("", ),
+	
 	
 }
 
