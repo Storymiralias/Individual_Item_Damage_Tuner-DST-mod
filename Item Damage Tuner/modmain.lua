@@ -22,50 +22,59 @@ local function FinalDamage(prefix)
 	end	
 end
 
-local prefix_table = { --TODO: Fix all prefixes "spear" -> "SPEAR" and e.t.c.
+local prefix_table = {
 	-- Start Melee Weapons
-	--SmartAdd("spear_wathgrithr", 42.5)
 	
-	-- Beginner and intermediate stage (Basic and personal)
+	-- Beginner Stage
 	"SPEAR",
-	"hambat",
+	"FENCE_ROTATOR",
 	"BULLKELP_ROOT",
-	"tentaclespike",
-	"battlepaddle",
-	"cutless",
+	"HAMBAT",
 	
-	--[[ Character exclusive
-	"dumbbell",
-	"dumbbell_golden",
-	"dumbbell_marbell",
-	"pocketwatch_weapon",]]
+	-- Intermediate Stage
+	"SPIKE",
+	"WHIP",
+	"NIGHTSTICK",
+	"CUTLESS",
+	"OAR_MONKEY",
+	-- Character Exclusive
+	"WATHGRITHR_SPEAR",
+	"WATHGRITHR_SHIELD",
+	"POCKETWATCH_DEPLETED",
 	
-	-- Advanced Stage (Magic, Ruins and Surface)
-	"whip",
-	"nightsword",
-	"ruins_bat",
-	"glasscutter",
-	"nightstick",
-	
-	--[[ Character exclusive
-	"dumbbell_gem",]]
+	-- Advanced Stage
+	"NIGHTSWORD",
+	"BATBAT",
+	"GLASSCUTTER",
+	"RUINS_BAT",
 	
 	-- Boss Drop or Craft 
-	"shield_terror",
-	"rabbitkingspear",
-	"trident",
+	"SHIELDOFTERROR",
+	"RABBITKINGSPEAR",
+	"TRIDENT",
 
 	-- Endgame (Rifts and Ancient Archive)
-	"sword_lunarplant",
-	"shadow_battleaxe",
-	"voidcloth_scythe",
-	"shadow_pillar",
+	"SWORD_LUNARPLANT",
+	"SHADOW_BATTLEAXE",
+	"VOIDCLOTH_SCYTHE",
+	-- Character Exclusive
+	"SPEAR_WATHGRITHR_LIGHTNING",
+	"SPEAR_WATHGRITHR_LIGHTNING_CHARGED",
 	
-		--[[ Character exclusive
-	"spear_wathgrithr_lightning",
-	"spear_wathgrithr_ice",]]
-	
+
 	-- Ranged Weapon 
+	
+	
+	-- Tools
+		--[[ Character exclusive
+	"DUMBBELL",
+	"DUMBBELL_GOLDEN",
+	"DUMBBELL_MARBELL",]]
+	
+		
+	--[[ Character exclusive
+	"DUMBBELL_GEM",]]
+	
 }
 
 for _, value in pairs (prefix_table) do 

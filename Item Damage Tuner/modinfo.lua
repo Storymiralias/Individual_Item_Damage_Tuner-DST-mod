@@ -1,8 +1,8 @@
 -- TODO: Update documentation about SmartAdd and other if need
 name = "Item Damage Tuner"
-description = "Fully adjustable item damage.\n\nBase: +-10 per click\nFloat: +-0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually."
+description = "Fully adjustable item damage.\n\nBase: +-10 per click\nFloat: +-0.1 per click\nFinal damage = Base + Float.\n\nSet any value from 0 to 9999.9 for each item individually!"
 author = "Storymiralias"
-version = "1.0.0"
+version = "1.1.0"
 
 forumthread = ""
 
@@ -12,7 +12,7 @@ all_clients_require_mod = true
 client_only_mod = false
 
 dst_compatible = true
-server_filter_tags = {"Item Damage Tuner", "Options", "Weapons"}
+server_filter_tags = {"Item damage tuner", "Individual item damage tuner", "Options", "Weapons"} --TODO: More useful tags
 
 icon = "modicon.tex"
 icon_atlas = "modicon.xml"
@@ -59,65 +59,71 @@ local function SmartAdd(id, damage, manual_label)
 	local def_int = damage - def_float	
 	
 	-- Apply title case formatting for UI presentation
-	local label_name = manual_label or (id:sub(1,1):upper()) .. (id:sub(2):lower()) --TODO?: Remove all "_"
+	local label_name = manual_label or (id:sub(1,1):upper()) .. (id:sub(2):lower())
 
 	return {id = id, label = label_name, default_int = def_int, default_fl = def_float}
 end
 
 -- Registry of items to be exposed in the mod configuration interface 
 local items_to_add = { --TODO: Add labels for each item manualy. Check real base damage
-	{ is_header = true, label = "Start Melee Weapons"},
-	-- Start Melee Weapons
-	--SmartAdd("spear_wathgrithr", )
+	{ is_header = true, label = "Melee Weapons"},
+	-- Melee Weapons
 	
-	{ is_header = true, label = "Beginner and intermediate"},
-	-- Beginner and intermediate stage (Basic and personal)
+	{ is_header = true, label = "Beginner", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info."},
+	-- Beginner Stage
 	SmartAdd("SPEAR", 34),
-	SmartAdd("hambat", 59.5),
-	SmartAdd("BULLKELP_ROOT", 34, "bullkelp root"),
-	SmartAdd("tentaclespike", 51),
-	SmartAdd("battlepaddle", 34),
-	SmartAdd("cutless", 34),
+	SmartAdd("FENCE_ROTATOR", 34, "Fencing Sword"),
+	SmartAdd("BULLKELP_ROOT", 27.2, "Bullkelp Stalk"),
+	SmartAdd("HAMBAT", 59.5, "Ham Bat"),
 	
-	--[[ Character exclusive
-	SmartAdd("dumbbell", 17)
-	SmartAdd("dumbbell_golden", 27.2)
-	SmartAdd("dumbbell_marbell", 40.8)
-	SmartAdd("pocketwatch_weapon", 34)]]
+	{ is_header = true, label = "Intermediate"},
+	-- Intermediate Stage
+	SmartAdd("SPIKE", 51, "Tentacle Spike"),
+	SmartAdd("WHIP", 27.2, "Tail o'Three Cats"),
+	SmartAdd("NIGHTSTICK", 43.35, "Morning Star"), --TODO: Incorrect default damage. SamrtAdd() math problem?
+	SmartAdd("CUTLESS", 27.2),
+	SmartAdd("OAR_MONKEY", 51, "Battle Paddle"), --TODO: Works differently. "MONKEY" is a prefix? 
+	{ is_header = true, label = "Exclusive"},
+	-- Character Exclusive
+	SmartAdd("WATHGRITHR_SPEAR", 42.5, "Battle Spear"),
+	SmartAdd("WATHGRITHR_SHIELD", 51, "Battle Rönd"),
+	SmartAdd("POCKETWATCH_DEPLETED", 81.6, "Alarming Clock"), --TODO: Works even more differently; Incorrect default damage! 
 	
-	{ is_header = true, label = "Advanced Stage"},
+	{ is_header = true, label = "Advanced"},
 	-- Advanced Stage (Magic, Ruins and Surface)
-	SmartAdd("whip", 27.2),
-	SmartAdd("nightsword", 68),
-	SmartAdd("ruins_bat", 59.5),
-	SmartAdd("glasscutter", 34),
-	SmartAdd("nightstick", 28.9),
-	
-	--[[ Character exclusive
-	SmartAdd("dumbbell_gem", 68)]]
+	SmartAdd("NIGHTSWORD", 68, "Dark Sword"),
+	SmartAdd("BATBAT", 42.5, "Bat Bat"),
+	SmartAdd("GLASSCUTTER", 68, "Glass Cutter"), --TODO: Works differenttly
+	SmartAdd("RUINS_BAT", 59.5, "Thulecite Club"),
 	
 	{ is_header = true, label = "Boss Drop"},
 	-- Boss Drop or Craft 
-	SmartAdd("shield_terror", 51),
-	SmartAdd("rabbitkingspear", 34),
-	SmartAdd("trident", 68),
+	SmartAdd("SHIELDOFTERROR", 51, "Shield of Terror"),
+	SmartAdd("RABBITKINGSPEAR", 51, "Rabbit King Cudgel"),
+	SmartAdd("TRIDENT", 51, "Strident Trident"), --TODO: Works differenttly
 	
 	{ is_header = true, label = "Endgame"},
 	-- Endgame (Rifts and Ancient Archive)
-	SmartAdd("sword_lunarplant", 34),
-	SmartAdd("shadow_battleaxe", 34),
-	SmartAdd("voidcloth_scythe", 34),
-	SmartAdd("shadow_pillar", 68),
+	SmartAdd("SWORD_LUNARPLANT", 38, "BrightShade Sword"),
+	SmartAdd("SHADOW_BATTLEAXE", 38, "Shadow Maul"), --TODO: Works different
+	SmartAdd("VOIDCLOTH_SCYTHE", 38, "Shadow Reaper"),
+	{ is_header = true, label = "Exclusive"},
+	-- Character Exclusive
+	SmartAdd("SPEAR_WATHGRITHR_LIGHTNING", 59.5, "Elding Spear"),
+	SmartAdd("SPEAR_WATHGRITHR_LIGHTNING_CHARGED", 59.5, "Charged Elding Spear"),
 	
-	--[[ Character exclusive
-	SmartAdd("spear_wathgrithr_lightning", 42.5)
-	SmartAdd("spear_wathgrithr_ice", 42.5)]]
 	
 	--{ is_header = true, label = "Ranged Weapon"},
 	-- Ranged Weapon
 	-- SmartAdd("", ),
 	
-	
+		--[[ Tools Character exclusive
+	SmartAdd("DUMBBELL", 17)
+	SmartAdd("DUMBBELL_GOLDEN", 27.2, "Dumbell golden")
+	SmartAdd("DUMBBELL_MARBELL", 40.8, "Dumbell marble") ]]
+	--[[ Character exclusive
+	SmartAdd("DUMBBELL_GEM", 68)]]
+
 }
 
 local c = 1
