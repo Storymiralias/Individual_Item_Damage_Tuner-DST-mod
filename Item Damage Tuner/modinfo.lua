@@ -54,7 +54,7 @@ local float_opts = FloatOptions()
 -- @return table: A structure containing {id: string, label: string, default_int: number, default_fl: number}
 local function SmartAdd(id, damage, manual_label)
 	
-	local def_float = (damage + 0.001) % 10
+	local def_float = (damage + 0.001) % 10 --HERE
 	local def_float_rou = def_float - (def_float % 0.1)
 	local def_int = damage - (damage % 10)
 	
