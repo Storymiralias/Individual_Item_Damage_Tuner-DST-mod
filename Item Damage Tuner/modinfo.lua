@@ -53,23 +53,23 @@ local float_opts = FloatOptions()
 -- @param damage number: The original constant damage value
 -- @return table: A structure containing {id: string, label: string, default_int: number, default_fl: number}
 local function SmartAdd(id, damage, manual_label)
-
-	local def_float_rema = damage % 10	
-	local def_float = (def_float_rema * 10 - (def_float_rema * 10 % 1)) / 10
-	local def_int = damage - def_float	
+	
+	local def_float = (damage + 0.001) % 10
+	local def_float_rou = def_float - (def_float % 0.1)
+	local def_int = damage - (damage % 10)
 	
 	-- Apply title case formatting for UI presentation
 	local label_name = manual_label or (id:sub(1,1):upper()) .. (id:sub(2):lower())
 
-	return {id = id, label = label_name, default_int = def_int, default_fl = def_float}
+	return {id = id, label = label_name, default_int = def_int, default_fl = def_float_rou}
 end
 
 -- Registry of items to be exposed in the mod configuration interface 
-local items_to_add = { --TODO: Add labels for each item manualy. Check real base damage
-	{ is_header = true, label = "Melee Weapons"},
+local items_to_add = { --TODO: Add labels for each item manualy; Check real base damage
+	{ is_header = true, label = "Melee Weapons", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info."},
 	-- Melee Weapons
 	
-	{ is_header = true, label = "Beginner", hover = "Base + Float = Final damage of the selected item. See the Workshop page for more info."},
+	{ is_header = true, label = "Beginner"},
 	-- Beginner Stage
 	SmartAdd("SPEAR", 34),
 	SmartAdd("FENCE_ROTATOR", 34, "Fencing Sword"),
@@ -80,14 +80,14 @@ local items_to_add = { --TODO: Add labels for each item manualy. Check real base
 	-- Intermediate Stage
 	SmartAdd("SPIKE", 51, "Tentacle Spike"),
 	SmartAdd("WHIP", 27.2, "Tail o'Three Cats"),
-	SmartAdd("NIGHTSTICK", 43.35, "Morning Star"), --TODO: Incorrect default damage. SamrtAdd() math problem?
+	SmartAdd("NIGHTSTICK", 28.9, "Morning Star"),
 	SmartAdd("CUTLESS", 27.2),
-	SmartAdd("OAR_MONKEY", 51, "Battle Paddle"), --TODO: Works differently. "MONKEY" is a prefix? 
+	SmartAdd("OARS.MONKEY", 51, "Battle Paddle"), --TODO: Works differently. "MONKEY" is a prefix? 
 	{ is_header = true, label = "Exclusive"},
-	-- Character Exclusive
 	SmartAdd("WATHGRITHR_SPEAR", 42.5, "Battle Spear"),
+	-- Character Exclusive
 	SmartAdd("WATHGRITHR_SHIELD", 51, "Battle Rönd"),
-	SmartAdd("POCKETWATCH_DEPLETED", 81.6, "Alarming Clock"), --TODO: Works even more differently; Incorrect default damage! 
+	SmartAdd("POCKETWATCH_DEPLETED", 81.6, "Alarming Clock"), --TODO: Works even more differently
 	
 	{ is_header = true, label = "Advanced"},
 	-- Advanced Stage (Magic, Ruins and Surface)
